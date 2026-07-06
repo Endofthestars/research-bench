@@ -1,0 +1,16 @@
+{
+  "name": "ef",
+  "version": "0.1.1",
+  "description": "research-bench 的Experiment Flow Claude Code 插件,负责环境构建部署、受控训练启动、对照实验执行与工作流回归验证;可与研究方向插件 rf 配合使用。",
+  "author": {
+    "name": "miyaki"
+  },
+  "keywords": [
+    "research",
+    "reproducibility",
+    "ml-experiments",
+    "execution",
+    "workflow",
+    "research-bench"
+  ]
+}

@@ -22,7 +22,7 @@
 | 廉价实证信号 | 实验只有 smoke(能跑)和 launch(全量)两档,方向定错要全量代价才知道 | ARIS pilot 预算封顶 |
 | 对抗审查 | auditor 只查完整性,没人扮演审稿人攻击方向价值 | ARIS research-review / vibe-science R2 |
 
-执行侧(operator / ISA / 租约 / guard)是相对同类项目的独有优势,**不动**。
+Experiment Flow (operator / ISA / 租约 / guard)是相对同类项目的独有优势,**不动**。
 
 ## 2. 借鉴机制 ↔ 设计哲学对照
 
@@ -32,7 +32,7 @@
 |---|---|---|---|
 | ARIS novelty-check | 四阶段查新:主张提取 → 多源检索(≥3 种表述,近 6 月 arXiv)→ 跨模型交叉验证 → 分级判定 + 最接近前期工作表 | 判断交给模型,**裁决与执行交给脚本**(引用可解析性是机械判定) | 新 skill + 协议文档 |
 | ARIS 反幻觉协议 | 引用必须可解析验证,否则标 `[UNVERIFIED]` | 同上;证据协议「记忆/印象禁止作为证据」的既有条款 | **Zotero 落库即验证**(见 §6) |
-| ARIS pilot | 预算封顶的试点实验,按实证信号淘汰弱想法 | 意图与执行分离;plugin 只带接口约定,预算裁决在项目侧训练封装 | run-experiment 的 pilot 变体(见 §7) |
+| ARIS pilot | 预算封顶的试点实验,按实证信号淘汰弱想法 | 意图与执行分离;plugin 只带接口约定,预算裁决在项目训练封装中完成 | run-experiment 的 pilot 变体(见 §7) |
 | ARIS IDEA_REPORT | 单一 canonical 档案折叠所有关卡产出,淘汰想法也记录 | 机器可读与人可读分离;教训库既有理念 | 方向档案目录(见 §5) |
 | ARIS 跨模型审查 | 外部模型家族做对抗审查,避开自我偏好局部最优 | 职责边界清晰;**能「否」不能「准」**(auditor→strategist 单向流的既有先例) | reviewer 角色 + Codex 通道(见 §8) |
 | vibe-science claim 账本 | 定量声明有生命周期,关卡通过/失败留痕,hook/脚本可机械查询 | 状态文件是完整事实来源(DESIGN §3.2 会话策略) | claims 表 + gates.jsonl(见 §5、§9) |
@@ -122,7 +122,7 @@ docs/directions/<slug>/
 - **不新增 ISA op**。pilot = run-experiment 的一种实验 config 约定:小 epochs、
   预算 env(`PILOT_MAX_HOURS` 等,config §12 定义、§7.2 登记),走**同一受控通道、同一 op 序列**,
   租约与 guard 照常生效——「可复现的廉价试点」是相对 ARIS 裸 SSH 的差异化优势。
-- 预算裁决在项目侧训练封装(读 env 超时自停),plugin 只在接口约定文档里写契约
+- 预算裁决在项目训练封装中完成(读 env 超时自停),plugin 只在接口约定文档里写契约
   ——遵「plugin 不内置项目运行时」。
 - pilot 结果不进论文级消融表,只进 pilot.md + gates.jsonl;tracking 记录加 `pilot` 标记以防混入。
 
@@ -164,7 +164,7 @@ docs/directions/<slug>/
 | 修改 | `agents/strategist.md` | 文献基座 + 教训库新条目类型 |
 | 修改 | `skills/init` `skills/config` | discovery 模块装配;§12 关键值 |
 | 修改 | `templates/project/scripts/test-workflow.sh` | ops 层补 gates.jsonl 存在性/格式断言 |
-| 不动 | `hooks/*` `agents/operator.md` `skills/build-env` `deploy-env` 等执行侧 | 护城河 |
+| 不动 | `hooks/*` `agents/operator.md` `skills/build-env` `deploy-env` 等 Experiment Flow 组件 | 护城河 |
 
 ## 11. 实施顺序建议
 
@@ -172,7 +172,7 @@ docs/directions/<slug>/
 |---|---|---|
 | P0 | `check-novelty` + novelty-protocol + Zotero 接入(config §12 最小版) | 性价比最高:立即防撞车,当天可用于筛现有候选方向 |
 | P1 | `reviewer` 角色 + Codex 通道 + dossier 目录 + gates.jsonl(关卡制最小版:查新+审查两关,pilot 关人工判) | 三关制成形 |
-| P2 | pilot 约定 + select_direction 契约扩展 | 依赖 exec,涉及项目侧封装 |
+| P2 | pilot 约定 + select_direction 契约扩展 | 依赖 exec,涉及项目训练封装 |
 | P3 | claims 表 + audit-results 投稿缺口报告 | 收尾论文接口 |
 | P4 | `close-direction` 教训回写 + survey-literature 完整版 | 闭环 |
 

@@ -1,12 +1,12 @@
 # Changelog
 
-## rf 0.1.1 / lf 0.1.1(未发布)
+## rf 0.1.1 / ef 0.1.1(未发布)
 
 ### 新增
 - **commands/ 显式命令入口**:每个 skill 增加一份同名的 `commands/<skill>.md` 薄壳
-  (内容仅为"按对应 SKILL.md 执行"),与 skill 走同一命名空间(`/rf:<name>`、`/lf:<name>`)。
+  (内容仅为"按对应 SKILL.md 执行"),与 skill 走同一命名空间(`/rf:<name>`、`/ef:<name>`)。
   目的:部分 Claude Code 版本对插件 skill 的斜杠补全不完整,commands 注册路径的补全更可靠;
-  同名共存实测无冲突,skill 侧的 `disable-model-invocation` 门控不受影响。
+  同名共存实测无冲突,skill 的 `disable-model-invocation` 门控不受影响。
   (与 0.5.1 被废弃的 `commands/rf-*` 伪前缀方案不同:本次命名空间来自插件自身的 `name`,
   commands 只是同名的第二注册路径,不承担命名职责。)
 
@@ -18,6 +18,8 @@
 ### 文档
 - README 新增「Skill 参考」一节:14 个 skill 的功能、模块依赖、执行方式与适用场景的规范说明,
   后续章节顺延编号。
+- 命名统一为 `rf`(Research Flow,研究流程插件)与 `ef`(Experiment Flow,实验流程插件);
+  源码目录同步调整为 `res-flow/` 与 `exp-flow/`。
 
 ## Unreleased
 
@@ -27,11 +29,11 @@
   操作配套服务。
 
 ### 文档
-- 更新项目描述:当前仓库定位为 `rf` 研究方向插件、`lf` 实验执行插件和 `remote-control` 可选服务
+- 更新项目描述:当前仓库定位为 `rf`(Research Flow)插件、`ef`(Experiment Flow)插件和 `remote-control` 可选服务
   组成的工作流套件,而不是单一 `research-bench` 插件。
 - 仓库/marketplace 品牌名统一为 `research-bench`(简称 `rb`)。
 
-## [BREAKING] rf 0.1.0 / lf 0.1.0(2026-07)—— 拆分为两个真实插件,仓库更名 research-bench
+## [BREAKING] rf 0.1.0 / ef 0.1.0(2026-07)—— 拆分为两个真实插件,仓库更名 research-bench
 
 ### 设计总纲
 0.5.1 用 `commands/lf-*` / `commands/rf-*` 伪装出来的短前缀,本质仍是单一插件
@@ -39,10 +41,10 @@
 冒号前的命名空间(`/plugin:skill`)只能来自插件自身 `plugin.json` 的 `name`,一个插件不能对外
 暴露两个命名空间。因此本次废弃 0.5.1 的别名方案,**把仓库拆成两个真正独立、各自可安装的插件**:
 
-- **`rf`**(研究方向侧):`analyze-architecture`、`modify-architecture`、`propose-hypothesis`、
+- **`rf`**(Research Flow):`analyze-architecture`、`modify-architecture`、`propose-hypothesis`、
   `refine-direction`、`check-novelty`、`audit-results`,命名空间 `/rf:<skill>`。
-- **`lf`**(执行侧):`build-env`、`deploy-env`、`run-experiment`、`test-workflow`,命名空间
-  `/lf:<skill>`。
+- **`ef`**(Experiment Flow):`build-env`、`deploy-env`、`run-experiment`、`test-workflow`,命名空间
+  `/ef:<skill>`。
 - 共享基座 `init`/`config`/`update-workflow`/`audit-workflow` 在两个插件里各留一份完整复制
   (内容按各自命名空间改写自引用前缀,行为等价,不是裁剪版)。
 - 仓库/marketplace 品牌名改为 `research-bench`(简称 `rb`),它本身不是插件,只是文档/仓库层面的
@@ -50,14 +52,14 @@
 
 ### 不兼容变更
 - 旧的单插件安装方式 `research-bench@research-bench` 和 `/research-bench:<skill>` 调用
-  语法**不再存在**,改为分别安装 `rf@research-bench`、`lf@research-bench`,调用改为 `/rf:<skill>` /
-  `/lf:<skill>`。
+  语法**不再存在**,改为分别安装 `rf@research-bench`、`ef@research-bench`,调用改为 `/rf:<skill>` /
+  `/ef:<skill>`。
 - 删除 `commands/` 目录(18 个 0.5.1 引入的短横线别名文件),被真正的插件命名空间取代。
-- `rf`、`lf` 作为全新的可安装身份,版本号从 `0.1.0` 起算,不延续旧插件的 `0.5.1`。
+- `rf`、`ef` 作为全新的可安装身份,版本号从 `0.1.0` 起算,不延续旧插件的 `0.5.1`。
 
 ### 权衡与已接受的代价
 - **hook 按插件重新分配、不是全量复制**:`guard-protected-write`(源码写保护)只在 `rf`;
-  `guard-train-channel`(训练启动通道保护)只在 `lf`;`session-init-check` 两边都有。只装一个插件
+  `guard-train-channel`(训练启动通道保护)只在 `ef`;`session-init-check` 两边都有。只装一个插件
   时会有对应的保护机制缺口,正常使用预期两个插件一起装。
 - **共享内容用真实文件复制,不用符号链接**:公开分发的插件仓库在 Windows 上克隆时符号链接可能
   签出成纯文本文件而不是真目录,存在静默失效风险;改为接受维护漂移的代价换取跨平台可靠性。
@@ -73,8 +75,8 @@
 agents/hooks/config manifest),不引入新的语义或职责边界。
 
 ### 新增
-- **执行侧(`lf-*`)**:`build-env`、`deploy-env`、`run-experiment`、`test-workflow`。
-- **研究方向侧(`rf-*`)**:`analyze-architecture`、`modify-architecture`、
+- **执行流程(`lf-*`)**:`build-env`、`deploy-env`、`run-experiment`、`test-workflow`。
+- **研究流程(`rf-*`)**:`analyze-architecture`、`modify-architecture`、
   `propose-hypothesis`、`refine-direction`、`check-novelty`、`audit-results`。
 - **公共基座(两组都有)**:`init`、`config`、`update-workflow`、`audit-workflow` 各自在
   `lf-*` 和 `rf-*` 下都有等价命令,可从任一 namespace 触达。
@@ -95,7 +97,7 @@ survey-literature / close-direction 属后续批次(P2–P4)。
 - **模块 `discovery`(第 7 个模块)+ `templates/config/60-discovery.md`(配置 §12,锚点不重排)**:
   §12.1 Zotero MCP 端点与集合约定(`directions/<slug>` 每方向一集合,导入即验证);
   §12.2 Codex 通道(主流程调用后传给 reviewer 合并;未配置降级独立 agent 冷上下文审查);§12.3 pilot 预算 env
-  (如 PILOT_MAX_HOURS / MAX_TOTAL_GPU_HOURS,由项目侧训练封装读取,启用 exec 时登记进 §7.2);
+  (如 PILOT_MAX_HOURS / MAX_TOTAL_GPU_HOURS,由项目训练封装读取,启用 exec 时登记进 §7.2);
   §12.4 查新参数(检索源清单 / 近月窗口 / 新颖性分级门槛 / review 分数线,默认 ≥8/10 可配)。
   两条保护条款写入本段:阈值修改属削弱检查标准,须显式说明并经用户确认;
   关卡与档位正交——auto/loop 档跳关必须留 gates.jsonl 的 skip 记录(含理由),不允许静默跳。
@@ -208,7 +210,7 @@ v0.3 把"远程 + docker"固定为不可配置为唯一执行形态;0.4.0 把它
 
 ### 设计总纲
 四层模型定名并推导全部命名与职责:**L3 意图层 = skills(轻量编排入口,负责判断与交互)/
-L2 服务层 = agents(五个服务承担核心任务)/ L1 驱动层 = 项目侧契约脚本(固定子命令 = ISA)/
+L2 服务层 = agents(五个服务承担核心任务)/ L1 驱动层 = 项目契约脚本(固定子命令 = ISA)/
 L0 机制层 = hooks + config frontmatter manifest**。
 
 ### 新增
@@ -272,9 +274,9 @@ L0 机制层 = hooks + config frontmatter manifest**。
   `modules` / `source-dir`),供 hook 与 skill 机械查表。§1–§11 编号保持为全局稳定锚点,
   模块未启用时对应 § 整段缺席、不重排。
 - **`init` skill**:交互式初始化器兼模块管理器——选模块(core 强制)→ 装配 config →
-	  实例化项目侧骨架(不覆盖已有文件)→ 交互填写关键值(source-dir、远程句柄、tracking 端点)→
+	  实例化项目工作区骨架(不覆盖已有文件)→ 交互填写关键值(source-dir、远程句柄、tracking 端点)→
   收尾校验(占位残留清单 + 实际运行 guards 测试)。
-- **`templates/project/` 项目侧骨架**:`directions/_TEMPLATE.md`(方向文件唯一模板,
+- **`templates/project/` 项目工作区骨架**:`directions/_TEMPLATE.md`(方向文件唯一模板,
   propose-hypothesis / refine-direction 的「方向落地块」统一指向它)、`RESEARCH_ROADMAP.md`
   (注册表 + 教训库)、`workflow-checklist.md`(C1–C8 通用检查项)、`scripts/test-workflow.sh`
   (子命令契约固定 `guards|sanity|connectivity|all`;guards 层可直接使用,喂假 JSON 断言 guard 退出码)。
