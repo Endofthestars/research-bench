@@ -3,6 +3,11 @@
 ## rf 0.1.1 / ef 0.1.1(未发布)
 
 ### 新增
+- **`settings` 交互式设置面板(rf、ef 共享 skill)**:体验对标 Claude Code 内置 `/config`——
+  `AskUserQuestion` 菜单逐层选择「配置段 → 键 → 新值」,主菜单按 manifest 只列已启用模块的段,
+  支持 `settings <段号|关键词|env>` 直达;写入规则与 `config` 完全同源(逐值确认、`env.RW_*`
+  特例、`source-dir` 双处同步),`modules`/`exec-profile` 修改仍转介 `init`。
+  与 `config` 分工:`config` 面向"知道键名"的定点命令式调用,`settings` 面向"浏览着改"。
 - **shared/ 单一事实来源**:rf、ef 共有的 30 个文件(公共 skill/command、operator/steward agent、
   session-init-check hook、全部 templates)抽取到顶层 `shared/`,文内插件前缀以 `{{P}}` 占位;
   `scripts/sync-shared.sh` 渲染进两个插件目录,`--check` 模式校验漂移。

@@ -19,6 +19,7 @@ description: 项目配置管理入口。支持查看 manifest 和占位统计、
 |---|---|
 | 交互式初始化 / 增删模块 / 换执行档案(exec-profile) | `init`(牵连装配:拼删段、嵌 ops 预设、实例化骨架) |
 | 查看配置 / 定点改一个配置值 / 非交互初始化 / 代写保护机制 env | **本 skill** |
+| 不记得键名、想菜单式逐项浏览与修改 | `settings`(交互面板,写入规则与本 skill 同源) |
 | 改脚手架、脚本、skill、hook、checklist(有跨文件同步面) | `update-workflow`(steward 两段式) |
 
 ## 模式一:查看(无参数)
