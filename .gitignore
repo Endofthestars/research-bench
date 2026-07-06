@@ -2,6 +2,9 @@
 research-bench.config.md
 .env
 
+# GitHub wiki 是独立仓库，不作为插件安装内容发布
+wiki/
+
 # remote-control:运行时数据、虚拟环境、Python 缓存都不进 git
 remote-control/data/
 remote-control/**/.venv/
