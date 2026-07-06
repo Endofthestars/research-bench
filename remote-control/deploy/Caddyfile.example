@@ -1,0 +1,7 @@
+# 复制为服务器上的 /etc/caddy/Caddyfile,把 your-domain.example 换成你自己的域名。
+# 前提:域名的 DNS A/AAAA 记录已经指向这台服务器的公网 IP。
+# Caddy 会自动申请并续期 Let's Encrypt 证书,不需要手动跑 certbot。
+
+your-domain.example {
+	reverse_proxy 127.0.0.1:8000
+}

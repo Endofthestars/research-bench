@@ -1,0 +1,11 @@
+# 给 docker-compose 部署用的 Caddyfile(区别于 Caddyfile.example 的裸机部署版本)。
+# 复制为 remote-control/deploy/Caddyfile,把 your-domain.example 换成你自己的域名。
+# 前提:域名的 DNS A/AAAA 记录已经指向这台服务器的公网 IP。
+#
+# 注意反向代理目标是 compose 里的服务名 `remote-control`(容器间靠 Docker 网络的
+# 内部 DNS 互通),不是 127.0.0.1——127.0.0.1 在 caddy 自己的容器里指向的是 caddy
+# 容器本身,不是 backend 容器。
+
+your-domain.example {
+	reverse_proxy remote-control:8000
+}

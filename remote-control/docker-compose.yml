@@ -1,0 +1,35 @@
+services:
+  remote-control:
+    build: .
+    # CI 会把镜像推到 GHCR;部署时也可以直接用现成镜像,把上面这行换成:
+    #   image: ghcr.io/<owner>/remote-control:latest
+    restart: unless-stopped
+    env_file:
+      - ./deploy/.env
+    volumes:
+      - remote-control-data:/data
+      # 按 deploy/.env 里 REMOTE_CONTROL_PROJECT_DIRS 配的每个 key,把宿主机上的真实目录
+      # 挂到容器内完全相同的路径下(路径必须和 .env 里写的一致,SDK 是在容器内部解析这个路径的):
+      # - /opt/research-bench:/opt/research-bench
+    expose:
+      - "8000"
+    # 注意:这里没有 ports:,后端不直接对宿主机/公网暴露端口,只能被同一个 compose
+    # 网络里的 caddy 服务访问到——保持"后端只在内部网络可达"这条安全约束。
+
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      - remote-control
+
+volumes:
+  remote-control-data:
+  caddy-data:
+  caddy-config:

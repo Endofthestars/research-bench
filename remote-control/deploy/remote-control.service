@@ -1,0 +1,27 @@
+[Unit]
+Description=remote-control (Claude Code remote trigger backend)
+After=network.target
+
+[Service]
+# 不要用 root 跑;先建一个专用低权限用户,例如:
+#   useradd --system --create-home --home-dir /opt/remote-control remotectl
+User=remotectl
+Group=remotectl
+WorkingDirectory=/opt/research-bench/remote-control
+EnvironmentFile=/opt/research-bench/remote-control/deploy/.env
+ExecStart=/opt/research-bench/remote-control/.venv/bin/uvicorn server.main:app --host 127.0.0.1 --port 8000
+Restart=on-failure
+RestartSec=3
+
+# 额外加固(systemd 沙箱,进一步收紧后端进程的系统访问面)
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+# ProtectSystem=strict 会让整个文件系统只读,除了这里列出的路径。
+# data/ 目录(SQLite + 日志)必须可写;REMOTE_CONTROL_PROJECT_DIRS 里配置的每个
+# 项目目录也必须加进来,否则 Claude Code 的 Edit/Write 工具会因系统层权限被拒绝
+# (即使 can_use_tool 允许了)。按你 .env 里实际配置的项目目录增补这一行。
+ReadWritePaths=/opt/research-bench/remote-control/data /opt/research-bench
+
+[Install]
+WantedBy=multi-user.target

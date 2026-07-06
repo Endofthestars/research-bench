@@ -1,0 +1,16 @@
+{
+  "name": "rf",
+  "version": "0.1.0",
+  "description": "research-bench 的研究方向侧 Claude Code 插件,负责架构分析、假设形成、方向管理、查新审计与结果解读;可与执行侧插件 lf 配合使用。",
+  "author": {
+    "name": "miyaki"
+  },
+  "keywords": [
+    "research",
+    "reproducibility",
+    "ml-experiments",
+    "architecture",
+    "workflow",
+    "research-bench"
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "name": "Remote Control",
+  "short_name": "RemoteCtrl",
+  "description": "远程触发和监控 Claude Code 会话",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#161b22",
+  "theme_color": "#161b22",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

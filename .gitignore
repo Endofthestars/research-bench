@@ -1,0 +1,9 @@
+# 真实项目配置含内网信息，绝不提交（模板在 templates/）
+research-bench.config.md
+.env
+
+# remote-control:运行时数据、虚拟环境、Python 缓存都不进 git
+remote-control/data/
+remote-control/**/.venv/
+remote-control/**/__pycache__/
+*.pyc
