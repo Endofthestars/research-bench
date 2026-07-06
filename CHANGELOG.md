@@ -1,5 +1,24 @@
 # Changelog
 
+## rf 0.1.1 / lf 0.1.1(未发布)
+
+### 新增
+- **commands/ 显式命令入口**:每个 skill 增加一份同名的 `commands/<skill>.md` 薄壳
+  (内容仅为"按对应 SKILL.md 执行"),与 skill 走同一命名空间(`/rf:<name>`、`/lf:<name>`)。
+  目的:部分 Claude Code 版本对插件 skill 的斜杠补全不完整,commands 注册路径的补全更可靠;
+  同名共存实测无冲突,skill 侧的 `disable-model-invocation` 门控不受影响。
+  (与 0.5.1 被废弃的 `commands/rf-*` 伪前缀方案不同:本次命名空间来自插件自身的 `name`,
+  commands 只是同名的第二注册路径,不承担命名职责。)
+
+### 修复
+- **README 本地安装方法**:原文档给出的 `.claude/settings.json` `"plugins": [路径]` 写法并非
+  Claude Code 支持的机制,按其操作插件不会被加载(`/init` 会命中内置命令而非 `/rf:init`)。
+  改为官方支持的两种方式:本地目录 `marketplace add` 后安装,或 `claude --plugin-dir` 按次加载。
+
+### 文档
+- README 新增「Skill 参考」一节:14 个 skill 的功能、模块依赖、执行方式与适用场景的规范说明,
+  后续章节顺延编号。
+
 ## Unreleased
 
 ### 新增
