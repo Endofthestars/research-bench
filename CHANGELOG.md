@@ -3,6 +3,14 @@
 ## rf 0.1.1 / ef 0.1.1(未发布)
 
 ### 新增
+- **shared/ 单一事实来源**:rf、ef 共有的 30 个文件(公共 skill/command、operator/steward agent、
+  session-init-check hook、全部 templates)抽取到顶层 `shared/`,文内插件前缀以 `{{P}}` 占位;
+  `scripts/sync-shared.sh` 渲染进两个插件目录,`--check` 模式校验漂移。
+  插件内的对应副本自此为生成物,改共享内容只改 `shared/` 再同步,消除双份手工维护。
+  插件安装物不变(仍是两棵自包含目录树)。
+- **仓库开发工具(`.claude/`,不随插件分发)**:3 个 agent(plugin-dev 插件开发、service-dev
+  remote-control 服务开发、consistency-auditor 只读全仓一致性审计)+ 3 个 skill
+  (`/add-capability` 新增能力脚手架、`/sync-shared` 共享内容同步、`/release` 发版流程)。
 - **commands/ 显式命令入口**:每个 skill 增加一份同名的 `commands/<skill>.md` 薄壳
   (内容仅为"按对应 SKILL.md 执行"),与 skill 走同一命名空间(`/rf:<name>`、`/ef:<name>`)。
   目的:部分 Claude Code 版本对插件 skill 的斜杠补全不完整,commands 注册路径的补全更可靠;

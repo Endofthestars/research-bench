@@ -2,6 +2,9 @@
 research-bench.config.md
 .env
 
+# Claude Code 会话运行时文件(.claude/ 下的 agents/skills 是仓库开发工具,要提交)
+.claude/scheduled_tasks.lock
+
 # GitHub wiki 是独立仓库，不作为插件安装内容发布
 wiki/
 
