@@ -1,0 +1,23 @@
+{
+  "name": "pf",
+  "version": "3.15.0",
+  "description": "Fork of academic-research-skills v3.15.0 (Cheng-I Wu, CC-BY-NC 4.0) with a research-bench localization bridge: /pf:dossier-bridge turns rf direction dossiers (claims, novelty file, adversarial review) into a materials brief the ARS writing pipeline consumes. Production-grade academic research pipeline for Claude Code: research → write → review → revise → finalize. 4 skills, 27 modes, 39-agent ensemble, L3 claim-faithfulness gate, cross-index triangulation, deterministic citation verification gate. Upstream provenance: see UPSTREAM.md.",
+  "author": {
+    "name": "Cheng-I Wu",
+    "url": "https://github.com/Imbad0202"
+  },
+  "homepage": "https://github.com/Imbad0202/academic-research-skills",
+  "repository": "https://github.com/Imbad0202/academic-research-skills",
+  "license": "CC-BY-NC-4.0",
+  "keywords": [
+    "academic",
+    "research",
+    "writing",
+    "review",
+    "deep-research",
+    "literature-review",
+    "systematic-review",
+    "peer-review",
+    "scholarly-publishing"
+  ]
+}

@@ -27,14 +27,18 @@ strategist 的可选输入，可以让假设更直接地对应真实缺口；没
    Agent(subagent_type="strategist", description="propose-hypothesis 假设卡片生成",
          prompt="<用户的探索意图/研究困境 + auditor 报告(若有)+ 用户提供的论文/摘要(若有)>")
    ```
-   strategist 自行按 `references/evidence-protocol.md` 读证据基座(架构地图、注册表、教训库、汇总表)。
+   strategist 自行按 `references/evidence-protocol.md` 读证据基座(架构地图、注册表、教训库、
+   RESEARCH_ROADMAP 种子池(若存在)、汇总表)。
 2. **转述产出**:3–5 张假设卡片(按优先级)+ 执行路线建议表;高优卡片的「方向落地块」原文保留。
    主对话只接收摘要,不重复拉文件内容。
+   **转述前核对**:至少一张卡片与现有活跃方向正交(不同 baseline_group 或不同问题轴,
+   strategist 的正交多样性硬规则)且如实标注风险档;缺失时退回 strategist 补足后再转述。
 3. 用户选中一张卡片要收敛细化 → 转 `refine-direction`(主流程多轮);
    要写入文件方向文件 + 登记注册表 → 走 `update-workflow`。
    **启用 `discovery` 时,选中的卡片先过三关再收敛**:`check-novelty`(关卡 1)→ pilot
    (关卡 2,当前批次由人工判定,跳过须留 gates.jsonl 记录)→ `reviewer` 审查(关卡 3,
-   分数线见 config §12.4)→ `refine-direction` 收敛(吸收 novelty.md / review.md 产出)→
+   分数线见 config §12.4;**两段喂料**:先只送核心诊断三件套 + 可证伪预测取盲评初判,
+   再送完整 dossier 取全档终判,协议见 reviewer 定义)→ `refine-direction` 收敛(吸收 novelty.md / review.md 产出)→
    `update-workflow` 落方向档案 + 登记注册表;未启用则维持上一行的原链路。
 
 ## 与 run-experiment 对接

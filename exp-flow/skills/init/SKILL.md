@@ -95,6 +95,7 @@ description: 初始化或调整项目的 research-bench 配置。流程包括本
      - `run.sh`:查头注释是否声明受控启动通道契约、用法是否 `[--fg] <训练命令…>` 形态;
      - `workflow-checklist.md`:查是否有 `C1` 起的编号检查项表;
      - `RESEARCH_ROADMAP.md`:查是否含「活跃方向注册表」「已关闭方向的硬约束」两个节标题;
+       缺「种子池」节时仅提示可按模板补加(后加的可选节,不构成不兼容);
      - `directions/_TEMPLATE/`:查 direction.md 是否含 slug / 状态 / claims / 子任务 / 结果 等契约字段;
        发现旧的单文件 `_TEMPLATE.md` 时警告"旧契约(单文件形态)",建议迁移为 dossier 目录,不覆盖不删除。
    - 目标路径写进 config 对应段(§10 / §11),保持 config 是事实来源。

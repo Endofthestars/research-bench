@@ -1,6 +1,6 @@
 {
   "name": "rf",
-  "version": "0.1.1",
+  "version": "0.1.3",
   "description": "research-bench 的Research Flow Claude Code 插件,负责架构分析、假设形成、方向管理、查新审计与结果解读;可与Experiment Flow插件 ef 配合使用。",
   "author": {
     "name": "miyaki"

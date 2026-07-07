@@ -4,20 +4,26 @@
     "name": "miyaki"
   },
   "metadata": {
-    "description": "research-bench 是面向模型架构研究的工作流套件,由 rf(Research Flow,研究流程)和 ef(Experiment Flow,实验流程)两个 Claude Code 插件以及可选 remote-control 远程触发服务组成,帮助研究者建立可复现、可审计、可远程操作的研究流程。"
+    "description": "research-bench 是面向模型架构研究的工作流套件,由 rf(Research Flow,研究流程)、ef(Experiment Flow,实验流程)、pf(Publication Flow,论文写作,ARS fork)三个 Claude Code 插件以及可选 remote-control 远程触发服务组成,帮助研究者建立可复现、可审计、可远程操作的研究流程。"
   },
   "plugins": [
     {
       "name": "rf",
       "source": "./res-flow",
-      "version": "0.1.1",
+      "version": "0.1.3",
       "description": "Research Flow 插件,用于架构分析、假设形成、方向管理、查新审计与结果解读。"
     },
     {
       "name": "ef",
       "source": "./exp-flow",
-      "version": "0.1.1",
+      "version": "0.1.3",
       "description": "Experiment Flow 插件,用于环境构建部署、受控训练启动、对照实验执行与工作流回归验证。"
+    },
+    {
+      "name": "pf",
+      "source": "./pub-flow",
+      "version": "3.15.0",
+      "description": "Publication Flow 插件:academic-research-skills v3.15.0 的 fork(CC-BY-NC 4.0,禁商用,署名 Cheng-I Wu),论文写作全链英文 skill(深度调研 / 论文写作 / 模拟评审 / 全程流水线)+ dossier-bridge 桥接(把 rf 方向档案整理成写作素材包)。溯源与同步见 pub-flow/UPSTREAM.md。"
     }
   ]
 }

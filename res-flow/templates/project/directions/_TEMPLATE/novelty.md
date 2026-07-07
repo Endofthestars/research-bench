@@ -1,5 +1,5 @@
-<!-- 骨架文件 | 模块:directions(+discovery) | 关卡 1(check-novelty)产出,格式遵 plugin 的
-     references/novelty-protocol.md;reviewer 交叉验证裁决原文由主流程代笔写入;
+<!-- 骨架文件 | 模块:directions(+discovery) | 关卡 1(check-novelty)产出,格式遵 rf 插件的
+     references/novelty-protocol.md(discovery 的执行方是 rf);reviewer 交叉验证裁决原文由主流程代笔写入;
      写入经 update-workflow 或用户确认,并向同目录 gates.jsonl 追加 {"gate":"novelty",…} 行
      (schema 见 direction.md 末尾注释)。 -->
 
@@ -28,5 +28,16 @@
 ### Codex 裁决原文
 <原文粘贴;未配置则写「未配置 Codex 通道,降级为单签」>
 
-### reviewer 检索结论
+### reviewer 盲评初判(第一段:仅核心主张)
 <原文粘贴>
+
+### reviewer 检索结论(第二段:全档终判)
+<原文粘贴;初判被终判推翻时须含原因说明>
+
+## 衍生种子(可选)
+> 仅当建议为「谨慎/放弃」:查新过程暴露的相邻空白点(如撞车论文未覆盖的设置),记 1–2 行;
+> 可经 update-workflow 登记进 RESEARCH_ROADMAP「种子池」。
+
+| 种子(一句话) | 触发来源(撞车论文 Zotero key) |
+|---|---|
+| | |

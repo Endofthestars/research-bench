@@ -10,7 +10,7 @@
 - Zotero MCP 端点:`<例:cookjohn/zotero-mcp(.xpi,MCP server 内置于 Zotero);项目 .mcp.json 里登记的
   server 名,如 zotero>`
 - 集合约定:`<例:directions/<slug>——每方向一个集合;查新/调研检出的文献按 DOI/arXiv id 导入对应集合,
-  导入成功即「已验证」(见 plugin references/novelty-protocol.md §2)>`
+  导入成功即「已验证」(见 rf 插件 references/novelty-protocol.md §2)>`
 - **未配置时的降级**:引用核验降级为 arXiv / CrossRef / Semantic Scholar 三层核验,验不过标
   `[UNVERIFIED]`;对照表的 Zotero key 列改填「核验来源 + id」。
 
@@ -26,7 +26,7 @@
 - pilot 结果只进方向 dossier 的 pilot.md + gates.jsonl,**不进论文级消融表**;
   tracking 记录加 `pilot` 标记:`<例:MLflow tag stage=pilot>`,防止混入正式结果。
 
-### 12.4 查新参数(check-novelty / reviewer 用;判定流程见 plugin references/novelty-protocol.md)
+### 12.4 查新参数(check-novelty / reviewer 用;判定流程见 rf 插件 references/novelty-protocol.md)
 - 检索源清单:`<例:arXiv / Semantic Scholar / CrossRef + WebSearch>`
 - 近月窗口:`<例:6(强制检索近 N 个月 arXiv,拦未刊预印本)>`
 - 新颖性分级门槛:`<例:总分 ≥7/10 建议继续,4–6 谨慎,≤3 放弃>`

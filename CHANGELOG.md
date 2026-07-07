@@ -1,6 +1,39 @@
 # Changelog
 
-## rf 0.1.1 / ef 0.1.1(未发布)
+## rf 0.1.3 / ef 0.1.3(2026-07-08)
+
+### 新增
+- **pf(Publication Flow)插件加入 marketplace**:academic-research-skills v3.15.0
+  (Imbad0202/academic-research-skills,commit becfcc4)的完整 fork,论文写作全链英文 skill
+  (deep-research / academic-paper / academic-paper-reviewer / academic-pipeline,27 种模式)。
+  本土改造以新增文件实现:中文原创 `dossier-bridge` skill 把 rf 方向 dossier(claims 表 done 行、
+  novelty 对照表、review 薄弱论点)整理成 ARS 写作入口可消费的英文素材包
+  `docs/paper/<paper-slug>/materials.md`。pf 版本号跟随上游(3.15.0),不参与 rf/ef 序列;
+  不参与 shared/ 体系;溯源与上游同步流程见 `pub-flow/UPSTREAM.md`。
+  **许可证**:pub-flow/ 子树保持 CC-BY-NC 4.0(禁商用,署名 Cheng-I Wu),仓库其余部分仍 MIT,
+  README 改为混合许可声明。
+- **方向发现三项优化**(源自 2026-07 对 vibe-science / AI Scientist-v2 等同类项目的二次调研):
+  - **衍生种子**:novelty.md / review.md 模板新增可选「衍生种子」小节,RESEARCH_ROADMAP 新增
+    「种子池」节(种子 / 来源方向 / 触发依据 / 状态)——查新撞车或审查淘汰时抢救过程中暴露的
+    相邻空白点,strategist / propose-hypothesis 把种子池列为发散输入;init 契约探测对缺
+    「种子池」节的存量路线图只软提示补加,不判不兼容。
+  - **两段式盲评**:reviewer 先只收核心主张(不含 strategist 论证与 novelty 结论)出独立初判,
+    再收完整 dossier 出终判,初判被推翻须说明原因;check-novelty 阶段三改为两次冷上下文委托,
+    review.md 迭代记录表拆「盲评初判 / 全档终判」两栏。
+  - **正交多样性硬规则**:strategist 每批 3–5 张假设卡片至少一张与现有活跃方向正交
+    (不同 baseline_group 或问题轴)并如实标注风险档,对抗探索空间收窄。
+
+### 修复
+- **audit-workflow 快照漏 reviewer**:输出结构的服务清单还停在五服务时代,补为六服务
+  (architect / operator / auditor / reviewer / strategist / steward)。
+
+### 文档
+- DESIGN §1.1「论文产出暂不扩展」改为由 pf 插件承担;顶部现状标注更新为三插件。
+- 新增 `docs/PROPOSAL-pub-flow.md`:pf 自研方案的机制调研记录(已被完整 fork 决策取代,留档)。
+- shared 模板中 novelty-protocol.md 的指引补注「rf 插件」(该协议文件只随 rf 分发,
+  ef 单独安装且启用 discovery 时指引不再落空)。
+
+## rf 0.1.2 / ef 0.1.2(2026-07-08)
 
 ### 新增
 - **`settings` 交互式设置面板(rf、ef 共享 skill)**:体验对标 Claude Code 内置 `/config`——
@@ -9,6 +42,13 @@
   支持 `settings <段号|关键词|env>` 直达;写入规则与 `config` 完全同源(逐值确认、`env.RW_*`
   特例、`source-dir` 双处同步),`modules`/`exec-profile` 修改仍转介 `init`。
   与 `config` 分工:`config` 面向"知道键名"的定点命令式调用,`settings` 面向"浏览着改"。
+
+## rf 0.1.1 / ef 0.1.1(2026-07-08)
+
+### 新增
+- **remote-control**:新增可选的自建远程触发/监控服务,包含 FastAPI 后端、静态 Web/PWA 面板、
+  systemd/Caddy/Docker 部署材料和安全说明。它不是 Claude Code 插件,而是 research-bench 的远程
+  操作配套服务。
 - **shared/ 单一事实来源**:rf、ef 共有的 30 个文件(公共 skill/command、operator/steward agent、
   session-init-check hook、全部 templates)抽取到顶层 `shared/`,文内插件前缀以 `{{P}}` 占位;
   `scripts/sync-shared.sh` 渲染进两个插件目录,`--check` 模式校验漂移。
@@ -34,15 +74,6 @@
   后续章节顺延编号。
 - 命名统一为 `rf`(Research Flow,研究流程插件)与 `ef`(Experiment Flow,实验流程插件);
   源码目录同步调整为 `res-flow/` 与 `exp-flow/`。
-
-## Unreleased
-
-### 新增
-- **remote-control**:新增可选的自建远程触发/监控服务,包含 FastAPI 后端、静态 Web/PWA 面板、
-  systemd/Caddy/Docker 部署材料和安全说明。它不是 Claude Code 插件,而是 research-bench 的远程
-  操作配套服务。
-
-### 文档
 - 更新项目描述:当前仓库定位为 `rf`(Research Flow)插件、`ef`(Experiment Flow)插件和 `remote-control` 可选服务
   组成的工作流套件,而不是单一 `research-bench` 插件。
 - 仓库/marketplace 品牌名统一为 `research-bench`(简称 `rb`)。
