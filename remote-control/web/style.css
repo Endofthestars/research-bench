@@ -79,3 +79,68 @@ pre {
 .status-running { color: #d29922; }
 .status-completed { color: #3fb950; }
 .status-failed { color: #f85149; }
+.status-stopped { color: #db6d28; }
+
+.stop-btn { background: #f85149; color: #fff; }
+
+/* transcript 结构化块 */
+#detail-log {
+  max-height: 60vh;
+  overflow-y: auto;
+  background: #0d1117;
+  padding: 0.75rem;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  display: grid;
+  gap: 0.4rem;
+}
+.blk {
+  white-space: pre-wrap;
+  word-break: break-word;
+  padding: 0.4rem 0.55rem;
+  border-radius: 6px;
+  border-left: 3px solid var(--border);
+}
+.blk-label {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin-bottom: 0.15rem;
+  font-family: ui-monospace, monospace;
+}
+.blk-assistant { background: #182030; border-left-color: var(--accent); }
+.blk-user { background: #1c2a1e; border-left-color: #3fb950; }
+.blk-thinking { color: var(--muted); font-style: italic; border-left-color: #6e7681; }
+.blk-tool { background: #221d2e; border-left-color: #a371f7; font-family: ui-monospace, monospace; }
+.blk-tool-result { color: var(--muted); font-family: ui-monospace, monospace; font-size: 0.76rem; }
+.blk-system { color: var(--muted); font-size: 0.76rem; border-left-color: #6e7681; }
+.blk-result { background: #1c2a1e; border-left-color: #3fb950; font-weight: 600; }
+.blk-error { border-left-color: #f85149; color: #f85149; }
+.blk-plain { font-family: ui-monospace, monospace; border-left-color: var(--border); }
+
+.chain-btn { margin-right: 0.5rem; background: var(--panel); color: var(--accent); border: 1px solid var(--border); }
+#continue-box { margin-top: 0.75rem; }
+
+/* 权限确认卡片 */
+.blk-approval {
+  background: #2b2412;
+  border-left-color: #d29922;
+  font-family: ui-monospace, monospace;
+}
+.approval-actions { margin-top: 0.5rem; font-size: 0.8rem; color: var(--muted); }
+.approval-actions button { margin-right: 0.5rem; }
+.approve-btn { background: #3fb950; color: #0d1117; }
+.deny-btn { background: #f85149; color: #fff; }
+.blk-approval.approval-allowed { border-left-color: #3fb950; }
+.blk-approval.approval-denied { border-left-color: #f85149; }
+
+/* P3:预设命令按钮 + 探针状态页 */
+.presets { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.5rem 0; }
+.preset-btn { background: #21262d; color: #c9d1d9; border: 1px solid #30363d; border-radius: 4px; padding: 0.3rem 0.6rem; cursor: pointer; }
+.preset-btn:hover { background: #30363d; }
+.probe { border-left: 3px solid #30363d; padding: 0.4rem 0.6rem; margin: 0.4rem 0; background: #0d1117; }
+.probe-fresh { border-left-color: #3fb950; }
+.probe-stale { border-left-color: #d29922; }
+.probe-error { border-left-color: #f85149; color: #f85149; }
+.probe-age { color: #8b949e; font-size: 0.85em; }
+.probe pre { margin: 0.3rem 0 0; white-space: pre-wrap; word-break: break-word; font-size: 0.85em; }

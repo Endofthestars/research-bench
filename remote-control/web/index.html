@@ -17,6 +17,7 @@
     Token
     <input id="token" type="password" placeholder="Bearer token" autocomplete="off" />
     <button id="save-token">保存</button>
+    <button id="enable-push" title="订阅完成/失败/待确认的 Web Push 通知">通知</button>
   </label>
 </header>
 
@@ -27,6 +28,7 @@
       项目
       <select id="project-key"></select>
     </label>
+    <div id="presets" class="presets"></div>
     <label>
       Prompt
       <textarea id="prompt" rows="4" placeholder="输入要发给 Claude Code 的 prompt"></textarea>
@@ -35,20 +37,34 @@
     <p id="submit-status"></p>
   </section>
 
+  <section id="probes" hidden>
+    <h2>探针 <button id="refresh-probes" title="读取服务端登记的探针 JSON(只读)">刷新</button></h2>
+    <div id="probes-body"></div>
+  </section>
+
   <section id="runs">
     <h2>运行记录</h2>
     <button id="refresh-runs">刷新</button>
     <table>
       <thead>
-        <tr><th>run_id</th><th>project</th><th>status</th><th>created_at</th><th></th></tr>
+        <tr><th>run_id</th><th>project</th><th>status</th><th>created_at</th><th>耗时</th><th></th></tr>
       </thead>
       <tbody id="runs-body"></tbody>
     </table>
   </section>
 
   <section id="detail" hidden>
-    <h2>详情:<span id="detail-run-id"></span></h2>
-    <pre id="detail-log"></pre>
+    <h2>详情:<span id="detail-run-id"></span> <small id="detail-status"></small></h2>
+    <p id="detail-chain"></p>
+    <div id="detail-log"></div>
+    <div id="continue-box" hidden>
+      <label>
+        继续对话(resume 同一会话)
+        <textarea id="continue-prompt" rows="3" placeholder="在这个会话的上下文里继续说…"></textarea>
+      </label>
+      <button id="continue-submit">继续</button>
+      <p id="continue-status"></p>
+    </div>
   </section>
 </main>
 

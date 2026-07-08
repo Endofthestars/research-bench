@@ -15,6 +15,13 @@
 | 7 | 事后无法追溯 | 每次触发追加写审计日志(时间、来源 IP、project_key、prompt 全文) | `server/main.py` `_audit` → `data/audit.log` |
 | 8 | 进程权限过大 | 裸机:systemd 用专用低权限用户跑,`ProtectSystem=strict` 收紧文件系统访问面。容器:镜像内建了非 root 用户 `remotectl`(UID 10001),`USER` 指令切过去后才跑 uvicorn | `deploy/remote-control.service`;`Dockerfile` |
 | 9 | 后端直接暴露公网 | 后端只监听 `127.0.0.1`,只有 Caddy 监听公网端口并做 TLS 终止 | `deploy/remote-control.service`(`--host 127.0.0.1`)、`deploy/Caddyfile.example` |
+| 10 | SSE 流认证时长期 token 进 URL(浏览器 `EventSource` 不能带 Authorization 头,若把 token 放 query 会进浏览器历史/反代 access log) | 不放 token:先用 Bearer token `POST /triggers/{id}/stream-ticket` 换一张**短时(60s)、单次使用、绑定该 run_id** 的随机 ticket,只有它出现在 query string 里;被记录/泄露的 ticket 要么已被消费要么已过期,换不回长期凭证。带头的客户端(curl)仍可直接用 Bearer 访问流端点 | `server/auth.py` `issue_stream_ticket`/`verify_stream_access`;`server/main.py` `create_stream_ticket`/`stream_trigger_log` |
+| 11 | 停止接口被滥用/探测 | `POST /triggers/{id}/stop` 与其他端点一样要求 Bearer token + 限流;run_id 不存在返回 404、已结束返回 409,不泄露白名单外信息;每次 stop 也写审计日志 | `server/main.py` `stop_trigger` |
+| 12 | 续聊接口绕过白名单/权限 | `POST /triggers/{id}/continue` 请求体**只收 prompt**:project_key/cwd 沿用原 run(客户端换不了项目),且原 run 的 project_key 若已被移出白名单则拒绝续聊;permission_mode/预算/超时/Bash 黑名单与首次触发完全一致;续聊同样走并发上限、限流与审计日志 | `server/main.py` `continue_trigger`;`server/runner.py` `execute_run`(resume 参数) |
+| 13 | Web Push 面被滥用(灌垃圾订阅/泄露内容) | 订阅/退订端点要求 Bearer token + 限流;订阅数量有上限(默认 20);endpoint 必须 https;VAPID 未配置时整个 push 面关闭(端点返回 409/enabled=false);payload 只带事件类型 + run_id + 短标题,**不带 prompt/命令全文**(消息体本身经 aes128gcm 端到端加密,只有订阅浏览器能解);失效订阅(404/410)自动清理 | `server/push.py`;`server/main.py` `add_push_subscription`;`server/config.py` `MAX_PUSH_SUBSCRIPTIONS` |
+| 14 | 确认中继被用作权限放宽通道 | 判定顺序硬编码:**黑名单命中 → 硬拒绝,永远不产生确认请求**(不存在人工放行黑名单命令的路径);中继只作用于灰区(默认:`rm -rf` 变体/`git push`/包管理器 install——不可逆删除、向远端发布、供应链引入三类);**超时默认拒绝**(默认 120s,`REMOTE_CONTROL_APPROVAL_TIMEOUT_SECONDS`);服务重启后遗留的 pending 无等待者,同样落空拒绝(fail closed);裁决端点要求 Bearer token + 审计,approval_id 为不可猜的 uuid4,已裁决/过期的请求不可再改(409) | `server/runner.py` `_build_can_use_tool`(判定顺序);`server/approvals.py`;`server/main.py` `decide_approval`;`server/config.py` `CONFIRM_BASH_PATTERNS` |
+| 15 | 预设命令被当成自动执行入口 | `GET /config/presets` 要求 Bearer token;预设**只填充输入框、不自动提交**(前端点击后仍需人工点「触发」),服务端不因预设而放宽任何触发路径;预设内容来自服务器 env(`REMOTE_CONTROL_PRESETS`),客户端无法注入 | `server/config.py` `_load_presets`;`server/main.py` `list_presets`;`web/app.js` `loadPresets`(只 `promptInput.value=`,不提交) |
+| 16 | 探针端点被用来读任意文件 | `GET /probes` 要求 Bearer token;**只读 env 白名单(`REMOTE_CONTROL_PROBE_FILES`)里显式登记的路径**,请求方无法指定任意路径(与第 2 条同一道防线);单文件有大小上限(默认 64KB)防内存滥用;文件缺席/非法 JSON/超大只在该项返回 `error`,不整体失败,也不泄露文件系统信息;**只读,绝不写探针文件** | `server/config.py` `_load_probe_files`/`PROBE_MAX_BYTES`;`server/main.py` `list_probes` |
 
 ## 已知的残留风险(没有完全解决,使用前要知道)
 

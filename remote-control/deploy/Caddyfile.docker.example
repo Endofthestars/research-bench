@@ -6,6 +6,10 @@
 # 内部 DNS 互通),不是 127.0.0.1——127.0.0.1 在 caddy 自己的容器里指向的是 caddy
 # 容器本身,不是 backend 容器。
 
+# SSE(GET /triggers/{id}/stream)说明:Caddy 的 reverse_proxy 对
+# Content-Type: text/event-stream 的响应会自动立即 flush(等效 flush_interval -1),
+# 不需要额外配置就能流式转发。
+
 your-domain.example {
 	reverse_proxy remote-control:8000
 }

@@ -2,6 +2,11 @@
 # 前提:域名的 DNS A/AAAA 记录已经指向这台服务器的公网 IP。
 # Caddy 会自动申请并续期 Let's Encrypt 证书,不需要手动跑 certbot。
 
+# SSE(GET /triggers/{id}/stream)说明:Caddy 的 reverse_proxy 对
+# Content-Type: text/event-stream 的响应会自动立即 flush(等效 flush_interval -1),
+# 不需要额外配置就能流式转发。如果你把 Caddy 换成 nginx,需要自己关掉
+# proxy_buffering(后端已带 X-Accel-Buffering: no 头,nginx 默认会尊重它)。
+
 your-domain.example {
 	reverse_proxy 127.0.0.1:8000
 }
