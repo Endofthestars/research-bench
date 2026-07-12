@@ -1,0 +1,16 @@
+{
+  "name": "ef",
+  "version": "0.2.0",
+  "description": "research-bench 的 Experiment Flow 双兼容插件,支持 Claude Code 与 Codex,负责环境构建部署、受控训练启动、对照实验执行与工作流回归验证;可与 Research Flow 插件 rf 配合使用。",
+  "author": {
+    "name": "miyaki"
+  },
+  "keywords": [
+    "research",
+    "reproducibility",
+    "ml-experiments",
+    "execution",
+    "workflow",
+    "research-bench"
+  ]
+}

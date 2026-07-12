@@ -5,6 +5,9 @@ description: 初始化或调整项目的 research-bench 配置。流程包括本
 
 # 初始化与模块管理（交互式）
 
+> **宿主兼容（必读）**：开始前读取 `../../references/host-compatibility.md`，先解析
+> `<PLUGIN_ROOT>`，再按当前宿主选择提问、服务委托和保护机制实现。
+
 将插件的分段 config 模板装配为项目内的 `.claude/research-bench.config.md`，并实例化项目工作区骨架文件。
 **幂等可重入**：已初始化项目再次执行时，进入增删模块或切换执行档案模式；已存在的骨架文件不覆盖，只做契约探测。
 
@@ -52,15 +55,15 @@ description: 初始化或调整项目的 research-bench 配置。流程包括本
    | 远程/本地句柄候选 | `docker context ls`(本地命令,不连接远程);`.ssh/config` 主机名 | 步骤 7(仅 remote 档案问) |
    | tracking 端点候选 | `.env` 与环境变量中的 `*_TRACKING_URI` 类;依赖文件中的跟踪工具名 | 步骤 7(不连网验证) |
    - 无候选或扫描失败 → 该问退回开放提问,静默降级、不报错不阻塞。
-3. **选模块**:先用 `AskUserQuestion` 给**三个场景预设**(按"处在研究哪个阶段"提问,选完可微调):
+3. **选模块**:先用宿主提问机制给**三个场景预设**(按"处在研究哪个阶段"提问,选完可微调):
    - **找方向包**:`core + directions + discovery`(无 exec,pilot 关卡降级人工判)
    - **执行包**:`core + exec + data + tracking`
    - **全家桶**:全部模块
    - 自定义:直接进下面的逐模块勾选
-   选中预设后进入 `AskUserQuestion`(multiSelect)微调,预设模块预勾选、`core` 强制包含不可取消;
+   选中预设后进入多选微调（宿主不支持多选时逐项确认）,预设模块预勾选、`core` 强制包含不可取消;
    每个选项一句话说明"解锁什么、要填什么"(照上表);有步骤 2 的扫描命中时,
    在该模块选项说明里标注推荐与依据(如「检测到 `.dvc/`,推荐」),但不替用户勾选。
-4. **两问定档(仅当选了 exec)**:用 `AskUserQuestion` 分两问确定 `exec-profile`,各带扫描推荐:
+4. **两问定档(仅当选了 exec)**:用宿主提问机制分两问确定 `exec-profile`,各带扫描推荐:
    - **第一问·位置**:训练在哪台机器执行?`local`(本机;有 `nvidia-smi` 命中则标"(推荐)"附依据)/
      `remote`(远程机;有远程 context / ssh 主机命中则标推荐)。
    - **第二问·运行时**:环境如何管理?`docker`(镜像;有 Dockerfile/docker 可用命中则标推荐)/
@@ -68,7 +71,7 @@ description: 初始化或调整项目的 research-bench 配置。流程包括本
    - 两问答案拼成 `exec-profile`,并据它**裁剪后续问答与装配**:remote 才问远程句柄(§5.1),
      docker 才问镜像分层(§5.2),venv 才问激活方式(§5.3);§7.2 嵌入对应 ops 预设;
      local 档案实例化 `scripts/run.sh`。
-5. **装配 config**:按选中模块,依序拼接 `${CLAUDE_PLUGIN_ROOT}/templates/config/` 下的
+5. **装配 config**:按选中模块,依序拼接 `<PLUGIN_ROOT>/templates/config/` 下的
    `00-core.md`、`10-exec.md`、`20-data.md`、`30-tracking.md`、`40-directions.md`、
    `50-maintenance.md`、`60-discovery.md` → 写入项目 `.claude/research-bench.config.md`。
    - 剥掉各分段文件头部的 `<!-- 模块:… -->` 装配注释(那是给模板维护者看的)。
@@ -77,9 +80,10 @@ description: 初始化或调整项目的 research-bench 配置。流程包括本
    - **嵌入 ops 预设**:用 `templates/config/ops-presets/<exec-profile>.md` 的映射表替换 §7.2 的
      OPS-PRESET 占位行(剥预设文件头部装配注释)。
    - 生成顶部 frontmatter(整份文件第一行必须是 `---`):
-     `config-version: 2`、`plugin-version`(读 plugin.json)、`modules: [<选中列表>]`、
+     `config-version: 2`、`plugin-version`(读当前宿主 manifest;并先确认 `.claude-plugin/plugin.json`
+     与 `.codex-plugin/plugin.json` 版本一致)、`modules: [<选中列表>]`、
      `source-dir: <步骤 7 的答案>`;选了 exec 再写 `exec-profile: <步骤 4 的答案>`(未选则不写该行)。
-6. **实例化项目工作区骨架**(来自 `${CLAUDE_PLUGIN_ROOT}/templates/project/`,**已存在的文件不覆盖**):
+6. **实例化项目工作区骨架**(来自 `<PLUGIN_ROOT>/templates/project/`,**已存在的文件不覆盖**):
    | 骨架 | 何时装 | 目标路径(约定,可在问答中改) |
    |---|---|---|
    | `directions/_TEMPLATE/`(dossier 目录:direction.md / novelty.md / review.md / pilot.md;gates.jsonl 无实体模板,schema 见 direction.md 末尾注释) | 选了 directions | `docs/directions/_TEMPLATE/` |
@@ -87,7 +91,7 @@ description: 初始化或调整项目的 research-bench 配置。流程包括本
    | `workflow-checklist.md` | 选了 maintenance | `docs/workflow-checklist.md` |
    | `scripts/test-workflow.sh` | 选了 maintenance 或 exec | `scripts/test-workflow.sh`(加执行位) |
    | `scripts/run.sh` | 选了 exec 且档案为 local-*(受控启动器,即 §7.1 通道) | `scripts/run.sh`(加执行位) |
-   - 写 `test-workflow.sh` 时把其中的 `__PLUGIN_ROOT__` 占位替换为 `${CLAUDE_PLUGIN_ROOT}` 实际值。
+   - 写 `test-workflow.sh` 时把其中的 `__PLUGIN_ROOT__` 占位替换为 `<PLUGIN_ROOT>` 实际绝对路径。
    - **契约探测(目标文件已存在时)**:不覆盖,但探测它是否符合本 plugin 依赖的契约,不符则
      **明确警告"存在但不兼容契约"**(仍不覆盖,建议用户人工合并或改名保留):
      - `test-workflow.sh`:试执行一个子命令看行为(如 `bash <路径> guards`;若退出码 64 且用法串不含
@@ -98,7 +102,7 @@ description: 初始化或调整项目的 research-bench 配置。流程包括本
      - `directions/_TEMPLATE/`:查 direction.md 是否含 slug / 状态 / claims / 子任务 / 结果 等契约字段;
        发现旧的单文件 `_TEMPLATE.md` 时警告"旧契约(单文件形态)",建议迁移为 dossier 目录,不覆盖不删除。
    - 目标路径写进 config 对应段(§10 / §11),保持 config 是事实来源。
-7. **填关键值(当场问答,其余留 `<占位>`)**:用 `AskUserQuestion` 逐项问,只问选中模块**及选定档案**
+7. **填关键值(当场问答,其余留 `<占位>`)**:用宿主提问机制逐项问,只问选中模块**及选定档案**
    涉及的。**每一问若有步骤 2 的扫描候选**:候选列为选项、最可能的一项放首位标"(推荐)"并附扫描依据,
    同时始终保留"未确定/其他"出口;无候选才用开放提问。
    - `source-dir`(core,必问):模型源码根相对路径 → 写 frontmatter + §2 `SOURCE_DIR`。
@@ -109,17 +113,19 @@ description: 初始化或调整项目的 research-bench 配置。流程包括本
    - 用户答"未确定"就保留 `<占位>`，不继续追问。其余项目值（镜像名、指标、脚本名、§7.2 ops 映射等）
      均保留模板占位，后续由用户填写或交给 update-workflow 处理；需说明：ops 映射不填时，operator 会拒绝执行
      对应 op(标「不适用」的行除外——那是当前档案没有的动作,operator 会跳过)。
-   - 提醒把 §7.1 两组模式写进项目 `.claude/settings.json` 的 `"env"`
-     (`RW_TRAIN_PATTERNS` / `RW_EXEC_PATTERN`;未设时 guard 按 `exec-profile` 取内置默认通道模式);
-     用户自行添加,或用 `/{{P}}:config set env.RW_EXEC_PATTERN <模式>` 经确认后代写。
+   - Claude Code 宿主下,提醒把 §7.1 两组模式写进项目 `.claude/settings.json` 的 `"env"`
+     (`RW_TRAIN_PATTERNS` / `RW_EXEC_PATTERN`;未设时 guard 按 `exec-profile` 取内置默认通道模式),
+     用户可自行添加,或用 `{{P}}:config set env.RW_EXEC_PATTERN <模式>` 经确认后代写。Codex 宿主从
+     config §7.1 读取并执行模型级预检,除非用户明确要求维护 Claude 兼容设置,否则不写该 settings 文件。
 8. **收尾校验**:
    - `grep -n '<' .claude/research-bench.config.md` 检查已启用段落的 `<占位>` 残留,
      有则**列清单提醒**（哪一段哪一行），不阻塞初始化；占位允许分批填写。
-   - 若启用 exec:实际运行 `scripts/test-workflow.sh guards` 验证 guard hook 生效,
-     解读 ✅/❌(❌ = 保护机制没起作用,须先修再用 run-experiment);ops 层此时多为占位,提醒即可
+   - 若启用 exec:实际运行 `scripts/test-workflow.sh guards` 验证 guard 脚本断言,
+     解读 ✅/❌(❌ = Claude 保护脚本行为回归,须先修再用 run-experiment);Codex 下明确注明此测试
+     不代表 hook 已挂载,运行时仍按兼容协议做命令预检;ops 层此时多为占位,提醒即可
      (标「不适用」的 op 是 ⚠️SKIP,正常)。
    - 输出总结:启用的模块与执行档案 / 生成与跳过的文件(含契约探测警告)/ 待填占位清单 / 下一步建议
-     (如"先执行 /rf:analyze-architecture 建架构地图"——该 skill 属于 rf 插件)。
+     (如"先执行 rf:analyze-architecture 建架构地图"——Claude Code 中调用 `/rf:analyze-architecture`)。
 
 ## 规则
 - **不覆盖已有内容**:已存在的骨架文件跳过(只做契约探测与警告);增/删模块模式下不动用户已填的正文值。
@@ -127,4 +133,4 @@ description: 初始化或调整项目的 research-bench 配置。流程包括本
 - 删模块 = 删 config 段 + 更新 frontmatter,**不删**已实例化的项目工作区骨架文件(用户数据);
   删 exec 模块时同时删 frontmatter 的 `exec-profile` 行。
 - 本 skill 只写 config 与骨架,不改模型源码、不修改 `.claude/settings.json` 的 permission
-  (提醒用户自行添加 env,或转 `/{{P}}:config set env.*` 经确认后代写)。
+  (Claude Code 下提醒用户自行添加 env,或转 `{{P}}:config set env.*` 经确认后代写)。

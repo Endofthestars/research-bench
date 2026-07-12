@@ -5,6 +5,9 @@ description: 修改 workspace 工作流脚手架。采用两阶段流程委托 s
 
 # 修改工作流（计划 → 预览 → 应用 + 同步）
 
+> **宿主兼容（必读）**：开始前读取 `../../references/host-compatibility.md`；宿主无子代理能力时,
+> 主流程读取并严格执行 `../../agents/steward.md`，两阶段确认边界不变。
+
 执行对工作流脚手架(`.claude/` 配置、`scripts/`、容器构建文件、`experiments/`、工作区文档)的修改。
 核心目标：修改后保持提示词、配置、脚本和文档一致。修改与关联文件同步视为同一个变更单元。
 本 skill 是 **steward 服务的正式入口**。
@@ -12,19 +15,20 @@ description: 修改 workspace 工作流脚手架。采用两阶段流程委托 s
 > **所属模块**:maintenance;必需 `maintenance`;可选 无(改动涉及哪个已启用模块就读对应段)。
 > **执行方式**:两段式委托 `steward` 服务(①出计划+diff 不写入文件 → ②主流程预览确认 → ③同一 steward 应用+自检)。
 > **开场三步**:① 读项目 `.claude/research-bench.config.md` 顶部 frontmatter manifest,确认 `modules`;
-> ② 无 config → 停止,提示先运行 `/{{P}}:init` 初始化;
+> ② 无 config → 停止,提示先运行 `{{P}}:init` 初始化(Claude Code 中为 `/{{P}}:init`);
 > ③ `modules` 不含 `maintenance` → 停止,提示先用 init 启用该模块。
 > 确认后读 §11(检查清单、脚手架范围)、§4(提交规范);改动涉及哪块就读对应段。
 > 注意:增删**模块**(改 frontmatter 的 `modules` / 拼删 config 段)不在本 skill 职责内,走 `init`。
 
 ## 两段式流程
-1. **第一阶段(steward 出计划,不写入文件)**:用 `Agent` 工具拉起 `steward`,传入修改意图,
+1. **第一阶段(steward 出计划,不写入文件)**:按兼容协议委托 `steward`,传入修改意图,
    要求只产出「改动计划 + 逐文件 diff + 关联同步清单」返回,**不写任何文件**。
    steward 会先读相关实际代码核对(避免基于过时印象改)。
 2. **主流程预览(规则 1)**:把 steward 的计划原样呈给用户——改哪些文件 / 每个文件的 diff /
    会连锁同步哪些关联文件(及为什么)。**等用户确认再进下一步**;用户改需求 → 回第 1 步重出计划。
-3. **第二阶段(同一 steward 应用 + 自检,规则 2)**:用 `SendMessage` 续接**同一个** steward
-   (保留其上下文,不重新拉起),让它按已确认的计划写入文件,并完成"修改→自检→同步"一体流程。
+3. **第二阶段(同一 steward 应用 + 自检,规则 2)**:续接**同一个** steward 上下文;若宿主无可续接
+   子代理,由保持着第一阶段计划的主流程继续按 steward 定义执行。按已确认计划写入文件,并完成
+   "修改→自检→同步"一体流程。
 4. steward 回报后,向用户转述:改了什么 / 自检通过了哪些清单项 / 是否触及规则 3 对象。
 
 ## 规则 1:改前预览
@@ -46,7 +50,7 @@ description: 修改 workspace 工作流脚手架。采用两阶段流程委托 s
 
 ## 规则 3:禁止自动削弱保护机制
 以下对象**不得自动修改**;确需改动,**必须停止、向用户说明原因并获明确确认**后才动:
-- `.claude/settings.json` 与 `.claude/hooks/`(保护机制:permission、guard hook、`includeCoAuthoredBy: false`)
+- `.claude/settings.json` 与 `.claude/hooks/`(Claude 保护机制),以及 Codex 兼容协议中的模型级预检规则
 - 任何 agent 定义里的**约束段落**
 - 配置 §11 的检查清单本身(检查标准)
 

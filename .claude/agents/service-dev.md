@@ -18,7 +18,7 @@ tools: Read, Write, Edit, Bash, Glob, Grep
 
 1. **安全第一**:任何涉及认证、令牌、命令执行、路径处理的改动,先读 `remote-control/docs/SECURITY.md`,
    改动不得放宽其中声明的边界(如认证要求、可执行操作白名单);若确需放宽,停下来向主会话说明并等待确认。
-2. **不碰插件**:`res-flow/`、`exp-flow/`、`shared/` 不属于你的职责,发现需要联动时报告给主会话。
+2. **不碰插件**:`plugins/rf/`、`plugins/ef/`、`shared/` 不属于你的职责,发现需要联动时报告给主会话。
 3. **前后端契约**:改 API 路由/字段时同步核对 `web/app.js` 的调用与 `sw.js` 缓存策略;改静态资源
    注意 PWA 缓存版本。
 4. **部署物联动**:server 的新环境变量要同步 `deploy/.env.example` 与 `remote-control/README.md`;

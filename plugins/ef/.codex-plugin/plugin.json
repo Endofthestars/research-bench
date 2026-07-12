@@ -1,0 +1,38 @@
+{
+  "name": "ef",
+  "version": "0.2.0",
+  "description": "Experiment Flow for environment build and deployment, controlled training launches, reproducible experiments, and workflow tests.",
+  "author": {
+    "name": "miyaki"
+  },
+  "homepage": "https://github.com/Endofthestars/research-bench",
+  "repository": "https://github.com/Endofthestars/research-bench",
+  "license": "MIT",
+  "keywords": [
+    "research",
+    "reproducibility",
+    "ml-experiments",
+    "execution",
+    "workflow",
+    "research-bench"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Experiment Flow",
+    "shortDescription": "环境、实验执行与工作流验证",
+    "longDescription": "面向模型实验的执行工作流，覆盖环境构建部署、受控训练启动、对照实验、复现记录和工作流回归验证。",
+    "developerName": "miyaki",
+    "category": "Education & Research",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "使用 ef:init 初始化实验工作流",
+      "使用 ef:run-experiment 执行对照实验",
+      "使用 ef:test-workflow 验证工作流"
+    ],
+    "brandColor": "#B45309"
+  }
+}

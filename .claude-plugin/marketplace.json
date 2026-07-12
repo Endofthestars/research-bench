@@ -4,19 +4,19 @@
     "name": "miyaki"
   },
   "metadata": {
-    "description": "research-bench 是面向模型架构研究的工作流套件,由 rf(Research Flow,研究流程)和 ef(Experiment Flow,实验流程)两个 Claude Code 插件以及可选 remote-control 远程触发服务组成,帮助研究者建立可复现、可审计、可远程操作的研究流程。"
+    "description": "research-bench 是面向模型架构研究的工作流套件,由 rf(Research Flow,研究流程)和 ef(Experiment Flow,实验流程)两个 Claude Code / Codex 双兼容插件以及可选 remote-control 远程触发服务组成。"
   },
   "plugins": [
     {
       "name": "rf",
-      "source": "./res-flow",
-      "version": "0.1.1",
+      "source": "./plugins/rf",
+      "version": "0.2.0",
       "description": "Research Flow 插件,用于架构分析、假设形成、方向管理、查新审计与结果解读。"
     },
     {
       "name": "ef",
-      "source": "./exp-flow",
-      "version": "0.1.1",
+      "source": "./plugins/ef",
+      "version": "0.2.0",
       "description": "Experiment Flow 插件,用于环境构建部署、受控训练启动、对照实验执行与工作流回归验证。"
     }
   ]

@@ -1,0 +1,16 @@
+{
+  "name": "rf",
+  "version": "0.2.0",
+  "description": "research-bench 的 Research Flow 双兼容插件,支持 Claude Code 与 Codex,负责架构分析、假设形成、方向管理、查新审计与结果解读;可与 Experiment Flow 插件 ef 配合使用。",
+  "author": {
+    "name": "miyaki"
+  },
+  "keywords": [
+    "research",
+    "reproducibility",
+    "ml-experiments",
+    "architecture",
+    "workflow",
+    "research-bench"
+  ]
+}

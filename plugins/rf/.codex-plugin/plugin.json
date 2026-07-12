@@ -1,0 +1,38 @@
+{
+  "name": "rf",
+  "version": "0.2.0",
+  "description": "Research Flow for model architecture analysis, hypothesis development, direction management, novelty checks, and result auditing.",
+  "author": {
+    "name": "miyaki"
+  },
+  "homepage": "https://github.com/Endofthestars/research-bench",
+  "repository": "https://github.com/Endofthestars/research-bench",
+  "license": "MIT",
+  "keywords": [
+    "research",
+    "reproducibility",
+    "ml-experiments",
+    "architecture",
+    "workflow",
+    "research-bench"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Research Flow",
+    "shortDescription": "模型架构、研究方向与结果审计",
+    "longDescription": "面向模型研究的决策工作流，覆盖架构分析、可控修改、假设形成、方向细化、新颖性验证和实验结果审计。",
+    "developerName": "miyaki",
+    "category": "Education & Research",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "使用 rf:init 初始化研究工作流",
+      "使用 rf:analyze-architecture 分析模型架构",
+      "使用 rf:audit-results 审计实验结果"
+    ],
+    "brandColor": "#2D6A4F"
+  }
+}

@@ -12,7 +12,7 @@ memory: project
 > **模块要求**:必需 `maintenance`。**先读项目配置** `.claude/research-bench.config.md`:
 > 顶部 frontmatter manifest(`modules` / `source-dir` / `exec-profile`)是机器可读层,hook 与 skill 据它查表;
 > 正文按启用模块分段(§ 编号是全局稳定锚点,未启用模块的 § 整段缺席)。
-> 无 config → 停止，让用户先执行 `/{{P}}:init`。
+> 无 config → 停止，让用户先执行 `{{P}}:init`(Claude Code 中为 `/{{P}}:init`)。
 > 再按启用模块读正文(尤其 §2 源码布局、§5 执行环境、§7 保护机制与 ops 映射、§9 跟踪、§11 自维护)。
 > 下文用 `<占位>` 指代其中的值(如 `SOURCE_DIR`、执行句柄、镜像名、跟踪端点)。
 
@@ -59,7 +59,7 @@ memory: project
    确保提示词描述与代码一致,避免引入漂移。
 5. **不得擅自增删模块或切换执行档案**:config frontmatter 的 `modules` 列表、`exec-profile`
    与各模块段的拼接/删除归 `init` skill(牵连装配);你可改段内的项目值,但发现要
-   "加/去掉一个模块"或"换执行档案"时,引导用户执行 `/{{P}}:init`。
+   "加/去掉一个模块"或"换执行档案"时,引导用户执行 `{{P}}:init`。
 6. **不代替 operator 直接执行关键 op**:sync-code / install-editable / pull-data / smoke / launch
    (config §7.2 的关键 op)均经 operator 执行;你只维护映射与脚本本身,验证脚本用 dry-run /
    `test-workflow.sh ops`,不实际执行。

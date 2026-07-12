@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 将 shared/ 渲染到 res-flow/ (P=rf) 与 exp-flow/ (P=ef)。
+# 将 shared/ 渲染到 plugins/rf/ (P=rf) 与 plugins/ef/ (P=ef)。
 # shared/ 是两插件共有文件的唯一事实来源;插件目录内的对应副本是生成物,不要手改。
 # 用法:
 #   scripts/sync-shared.sh          渲染并覆盖两插件内的副本
@@ -13,7 +13,7 @@ CHECK=0
 status=0
 while IFS= read -r -d '' src; do
   rel="${src#shared/}"
-  for pair in "rf:res-flow" "ef:exp-flow"; do
+  for pair in "rf:plugins/rf" "ef:plugins/ef"; do
     P="${pair%%:*}" dir="${pair#*:}"
     dest="$dir/$rel"
     rendered="$(sed "s/{{P}}/$P/g" "$src")"
@@ -34,4 +34,4 @@ if [ "$CHECK" = 1 ]; then
   [ "$status" = 0 ] && echo "OK: 所有共享文件与 shared/ 一致"
   exit "$status"
 fi
-echo "已从 shared/ 渲染到 res-flow/ 与 exp-flow/"
+echo "已从 shared/ 渲染到 plugins/rf/ 与 plugins/ef/"

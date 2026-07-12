@@ -1,6 +1,26 @@
 # Changelog
 
-## rf 0.1.1 / ef 0.1.1(未发布)
+## rf 0.2.0 / ef 0.2.0（未发布）
+
+### 新增
+- **Claude Code / Codex 双兼容发布**:rf、ef 各增加 `.codex-plugin/plugin.json`,仓库增加
+  `.agents/plugins/marketplace.json`;Claude Code 的 `.claude-plugin` 清单、commands 与 hooks 继续保留。
+- **宿主兼容协议**:新增共享 `references/host-compatibility.md`,统一插件根解析、结构化提问、服务委托
+  与保护机制映射。Codex 无插件子代理时按同一 `agents/*.md` 在主流程回退执行。
+- **Codex 显式触发策略**:build-env / deploy-env 增加 `agents/openai.yaml`,禁止隐式执行耗时且有副作用的镜像操作。
+
+### 变更
+- 插件源码标准化到 `plugins/rf/`、`plugins/ef/`,Claude Code 与 Codex marketplace 指向同一份插件内容。
+- 公开 skill 移除对 `AskUserQuestion`、`Agent(...)`、`${CLAUDE_PLUGIN_ROOT}` 的硬依赖,改为宿主能力适配。
+- Codex 当前不加载 Claude hooks;源码写保护与训练通道保护在 Codex 下改为技能级命令前预检,
+  并在 README 明确其不等价于系统级 hook。
+- `build-env` / `deploy-env` 不再使用 Codex 校验不接受的 `disable-model-invocation: true` frontmatter;
+  Claude 与 Codex 均由显式触发规则约束。
+
+### 验证
+- rf、ef 均通过 Codex 官方 plugin validator;共享文件通过 `scripts/sync-shared.sh --check`。
+
+## rf 0.1.1 / ef 0.1.1（开发记录，未单独发布）
 
 ### 新增
 - **`settings` 交互式设置面板(rf、ef 共享 skill)**:体验对标 Claude Code 内置 `/config`——

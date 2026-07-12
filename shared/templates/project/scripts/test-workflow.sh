@@ -17,13 +17,12 @@
 set -u
 
 # ---- 定位 plugin 的 guard 脚本 -------------------------------------------
-# __PLUGIN_ROOT__ 由 init 实例化时替换为实际插件根(${CLAUDE_PLUGIN_ROOT});
+# __PLUGIN_ROOT__ 由 init 实例化时替换为实际插件根(Claude Code / Codex 均适用);
 # 也可用环境变量 RW_PLUGIN_ROOT 覆盖(插件搬家/多版本时)。
 PLUGIN_ROOT="${RW_PLUGIN_ROOT:-__PLUGIN_ROOT__}"
 if [ ! -f "$PLUGIN_ROOT/hooks/guard-train-channel.sh" ]; then
   # 保障:在常见插件安装目录里搜(占位未被替换、或插件被移动时)
-  for cand in "$HOME"/.claude/plugins/*/ef/ "$HOME"/.claude/plugins/ef/ \
-              "$HOME"/.claude/plugins/*/exp-flow/ "$HOME"/.claude/plugins/exp-flow/; do
+  for cand in "$HOME"/.claude/plugins/*/ef/ "$HOME"/.claude/plugins/ef/; do
     [ -f "${cand}hooks/guard-train-channel.sh" ] && PLUGIN_ROOT="${cand%/}" && break
   done
 fi
@@ -94,7 +93,7 @@ run_sanity() {
 run_ops() {
   echo "== ops:ISA 映射 dry-run 断言(config §7.2;不实际执行任何 op)=="
   if [ ! -f "$CFG" ]; then
-    skip "无 config($CFG);先执行 /{{P}}:init"
+    skip "无 config($CFG);先执行 {{P}}:init(Claude Code 中加前导 /)"
     return
   fi
   if ! manifest_modules | grep -q 'exec'; then
@@ -153,7 +152,7 @@ run_ops() {
 run_ops_gates() {
   echo "== ops(gates):方向 dossier 的 gates.jsonl 逐行 JSON 断言(config §12;不实际执行任何 op)=="
   if [ ! -f "$CFG" ]; then
-    skip "无 config($CFG);先执行 /{{P}}:init"
+    skip "无 config($CFG);先执行 {{P}}:init(Claude Code 中加前导 /)"
     return
   fi
   if ! manifest_modules | grep -q 'discovery'; then

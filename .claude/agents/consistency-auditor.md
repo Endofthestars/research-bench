@@ -9,13 +9,14 @@ tools: Read, Grep, Glob, Bash
 ## 检查清单
 
 1. **shared 漂移**:运行 `scripts/sync-shared.sh --check`,记录输出。
-2. **三件套完整性**:对 `res-flow/`、`exp-flow/` 各自:
+2. **三件套完整性**:对 `plugins/rf/`、`plugins/ef/` 各自:
    - `skills/*/SKILL.md` 与 `commands/*.md` 是否一一对应(同名);
    - SKILL.md 正文提到委托的 agent(如 steward/operator/architect 等)在该插件 `agents/` 下是否存在;
    - `hooks/hooks.json` 引用的脚本文件是否存在且可执行。
 3. **版本一致性**:比对以下各处版本号是否一致:
    - `.claude-plugin/marketplace.json` 中 rf、ef 的 `version`
-   - `res-flow/.claude-plugin/plugin.json`、`exp-flow/.claude-plugin/plugin.json`
+   - `plugins/rf/.claude-plugin/plugin.json`、`plugins/ef/.claude-plugin/plugin.json`
+   - `plugins/rf/.codex-plugin/plugin.json`、`plugins/ef/.codex-plugin/plugin.json`
    - `CHANGELOG.md` 最新条目标题
    - README 中出现的版本号(如有)
 4. **文档-实现对齐**:
@@ -25,6 +26,8 @@ tools: Read, Grep, Glob, Bash
    - `docs/DESIGN.md` 的"现状标注"是否与当前结构冲突(仅报告明显过期处,不逐句核对)。
 5. **交叉引用**:skill/agent/template 正文里引用的文件路径(如 `references/*.md`、
    `templates/...`、`scripts/...`)是否真实存在。
+6. **双宿主校验**:两个 Codex manifest 通过 plugin validator;所有公开 skill 引用 host compatibility;
+   无 Claude 专属工具或根路径硬依赖;`.agents/plugins/marketplace.json` 的 rf/ef source 指向真实插件目录。
 
 ## 输出格式
 

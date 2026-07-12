@@ -5,12 +5,15 @@ description: 项目配置管理入口。支持查看 manifest 和占位统计、
 
 # 配置管理(查看 / 定点改值 / 非交互初始化)
 
+> **宿主兼容（必读）**：开始前读取 `../../references/host-compatibility.md`，先解析
+> `<PLUGIN_ROOT>`，再按当前宿主选择提问、服务委托和保护机制实现。
+
 `.claude/research-bench.config.md` 的配置管理入口。原则：**config 是单一事实来源**。
 如果只修改配置段内的单个值，可由本 skill 处理；凡是涉及模块装配、脚手架或跨文件同步的改动，均转交 `init` 或 `update-workflow`。
 
 > **所属模块**:—(管理配置,同 init);**执行方式**:主流程执行。
 > **开场**:读项目 `.claude/research-bench.config.md` 顶部 frontmatter manifest;
-> 无 config 且非 `config init …` 调用 → 提示先运行 `/{{P}}:init`(交互)或
+> 无 config 且非 `config init …` 调用 → 提示先运行 `{{P}}:init`(交互;Claude Code 中为 `/{{P}}:init`)或
 > `config init <键值对>`(非交互)。
 
 ## 边界(先查表再动手)
@@ -42,11 +45,13 @@ description: 项目配置管理入口。支持查看 manifest 和占位统计、
 
 ### 模式二特例:env 收编(set env.<名> <值>)
 
-`config set env.RW_EXEC_PATTERN <模式>`(或 `env.RW_TRAIN_PATTERNS`)——经用户确认后**代写项目
-`.claude/settings.json` 的 `"env"` 键**(只修改 `"env"` 下对应条目,其余原样保留):
-- 写前展示将写入的 JSON 片段(旧值→新值)等确认;同时把同一模式回填 config §7.1 散文段,保持两处一致。
-- **机制协同，不是故障**：guard-protected-write hook 会对"写 `.claude/settings.json`"这一操作
-  **再次向用户请求确认**。这是保护机制不可自动削弱的设计行为，需如实告知用户。
+`config set env.RW_EXEC_PATTERN <模式>`(或 `env.RW_TRAIN_PATTERNS`)——始终先经用户确认并把模式
+回填 config §7.1。Claude Code 宿主（或用户明确要求维护 Claude 兼容设置）再代写项目
+`.claude/settings.json` 的 `"env"` 键,只修改对应条目,其余原样保留:
+- 写前展示将写入的 JSON 片段(旧值→新值)等确认;同时展示 config §7.1 的同步修改。
+- Claude Code 的 guard-protected-write hook 会对写 `.claude/settings.json` **再次请求确认**;
+  Codex 不加载该 hook,但必须主动执行同样的二次确认。Codex 下未获“维护 Claude 兼容设置”的明确要求时,
+  只更新 config §7.1,不创建或修改 `.claude/settings.json`。
 - **放宽拦截的改动额外提示风险**:新模式明显比旧值/内置默认更宽(如通道模式改成 `.*`、
   训练特征清空)→ 在确认问句里显式标注"此改动会放宽保护机制拦截面,请确认这是有意的"。
 
@@ -55,7 +60,7 @@ description: 项目配置管理入口。支持查看 manifest 和占位统计、
 `config init modules=core,exec exec-profile=local-venv source-dir=src/ …` —— **非交互装配**,
 提供一条快速入口:跳过向导与预扫描,按给定键值直接生成 config + 骨架。
 - 装配规则与 init 完全一致(同一套模板,不另起标准):按 `modules` 拼接
-  `${CLAUDE_PLUGIN_ROOT}/templates/config/` 分段、剥装配注释;含 `exec` 时按 `exec-profile`
+  `<PLUGIN_ROOT>/templates/config/` 分段、剥装配注释;含 `exec` 时按 `exec-profile`
   裁剪 §5 小节、把 `templates/config/ops-presets/<exec-profile>.md` 的映射表嵌入 §7.2、
   local 档案实例化 `scripts/run.sh`;选了 maintenance 或 exec 实例化 `scripts/test-workflow.sh`
   (替换 `__PLUGIN_ROOT__`,加执行位);directions / maintenance 骨架同 init 的骨架表
@@ -68,7 +73,7 @@ description: 项目配置管理入口。支持查看 manifest 和占位统计、
 - **收尾校验照旧**(同 init 步骤 8):占位清单提醒;若含 exec 实际运行 `scripts/test-workflow.sh guards`。
 
 ## 规则
-- 只写 `.claude/research-bench.config.md`、(模式三)骨架实例化目标、(env 收编,经确认)
-  `.claude/settings.json` 的 `"env"`;**其余内容均不修改**。
+- 只写 `.claude/research-bench.config.md`、(模式三)骨架实例化目标,以及 Claude Code 宿主或用户明确
+  要求维护兼容设置时的 `.claude/settings.json` `"env"`;**其余内容均不修改**。
 - 每次写入前都展示旧值→新值（或将写入内容）并等待确认；不属于本 skill 的键当场转介。
 - 不删模块段、不动用户已填的其他值;查看模式绝对只读。

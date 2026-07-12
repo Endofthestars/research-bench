@@ -58,7 +58,8 @@
   `<例:remote-docker → docker --context <远程> exec/run;remote-venv → ssh <远程> …;
   local-docker → docker exec/run;local-venv → scripts/run.sh …>`
 - 这两组值同时要写进项目 `.claude/settings.json` 的 `"env"`(`RW_TRAIN_PATTERNS` / `RW_EXEC_PATTERN`,
-  见 plugin `hooks/guard-train-channel.sh` 头注释;可用 `/{{P}}:config set env.*` 经确认后代写);
+  见 plugin `hooks/guard-train-channel.sh` 头注释;可用 `{{P}}:config set env.*` 经确认后代写,
+  Claude Code 中调用名带前导 `/`);
   hook 只认 env,不解析本段散文——**env 未设时** hook 按 frontmatter 的 `exec-profile` 取内置默认通道模式。
 - guard 回归测试:`scripts/test-workflow.sh guards`(init 实例化,固定子命令契约,见 §11 / 脚本头注释)。
 - 保护机制对 **operator 服务同样生效**:operator 的每条 Bash 命令照样过 guard,不得规避。

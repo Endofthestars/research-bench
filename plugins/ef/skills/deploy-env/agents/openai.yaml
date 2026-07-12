@@ -1,0 +1,6 @@
+interface:
+  display_name: Deploy Environment
+  short_description: 显式部署已构建的环境镜像
+  default_prompt: 使用 ef:deploy-env 部署实验环境镜像
+policy:
+  allow_implicit_invocation: false

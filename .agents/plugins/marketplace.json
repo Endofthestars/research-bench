@@ -1,0 +1,32 @@
+{
+  "name": "research-bench",
+  "interface": {
+    "displayName": "Research Bench"
+  },
+  "plugins": [
+    {
+      "name": "rf",
+      "source": {
+        "source": "local",
+        "path": "./plugins/rf"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Education & Research"
+    },
+    {
+      "name": "ef",
+      "source": {
+        "source": "local",
+        "path": "./plugins/ef"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Education & Research"
+    }
+  ]
+}

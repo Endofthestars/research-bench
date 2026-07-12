@@ -15,7 +15,8 @@ disable-model-invocation: true
    报告问题清单,让用户决定先修还是强行继续。
 2. **版本 bump**(全部统一为 `<version>`):
    - `.claude-plugin/marketplace.json`:rf、ef 两个 `version`
-   - `res-flow/.claude-plugin/plugin.json`、`exp-flow/.claude-plugin/plugin.json`
+   - `plugins/rf/.claude-plugin/plugin.json`、`plugins/ef/.claude-plugin/plugin.json`
+   - `plugins/rf/.codex-plugin/plugin.json`、`plugins/ef/.codex-plugin/plugin.json`
    - README 中出现的版本号(如有)
 3. **CHANGELOG**:把「未发布」段落标题改为 `rf <version> / ef <version>(YYYY-MM-DD)`;
    若内容与实际改动不符(git log 对照),补齐后向用户展示确认。
@@ -28,5 +29,5 @@ disable-model-invocation: true
 
 ## 规则
 
-- 版本号五处必须一次改齐,改完 grep 旧版本号确认无残留。
+- 两个平台的 manifest 版本必须一次改齐,改完 grep 旧版本号确认活动清单无残留。
 - 不引入本次发版范围之外的内容改动。
